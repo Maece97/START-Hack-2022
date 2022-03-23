@@ -1,0 +1,6 @@
+{
+	"appId": "ch.maece",
+	"appName": "frontend",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}
