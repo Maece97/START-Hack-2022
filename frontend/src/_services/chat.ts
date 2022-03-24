@@ -8,13 +8,18 @@ export const createChatMessage = async (message: ChatMessage): Promise<boolean> 
     .post('http://localhost:8080/message/', {
       message: message.message,
       timestamp: message.timestamp,
+      username: message.username,
     })
-    .then((response) => true)
+    .then((response) => response.data)
     .catch((error) => {
       console.log(error);
       return false;
     });
 
 export const test = (): void => {
-  console.log();
+  console.log({
+    message: 'MEssage heyhey',
+    timestamp: 1234556677,
+    username: 'proGamerLPHD',
+  });
 };

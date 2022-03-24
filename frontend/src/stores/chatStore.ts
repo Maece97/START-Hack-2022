@@ -26,9 +26,9 @@ export const useChatStore = defineStore('chat', {
         timestamp: Date.now(),
         username: 'xxGamer2001xx',
       };
-      if (await createChatMessage(chatMessage)) {
-        this.chat.push(chatMessage);
-      }
+      const response = await createChatMessage(chatMessage);
+      console.log(response);
+      this.chat.push(chatMessage);
     },
   },
 });

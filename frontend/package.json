@@ -28,7 +28,8 @@
     "postcss": "^7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "vue": "^3.2.13",
-    "vue-router": "^4.0.3"
+    "vue-router": "^4.0.3",
+    "vuewordcloud": "^18.7.12"
   },
   "devDependencies": {
     "@types/electron-devtools-installer": "^2.2.0",
