@@ -18,6 +18,21 @@
           src="../assets/happy.png"
           alt="Happy Avatar"
           width="200"
+          v-if="sentiment.overallSentiment === 'Positive'"
+        />
+        <img
+          class="flex items-center mx-auto mt-10 filter drop-shadow-2xl"
+          src="../assets/neutral.png"
+          alt="Neutral Avatar"
+          width="200"
+          v-if="sentiment.overallSentiment === 'Neutral'"
+        />
+        <img
+          class="flex items-center mx-auto mt-10 filter drop-shadow-2xl"
+          src="../assets/sad.png"
+          alt="Sad Avatar"
+          width="200"
+          v-if="sentiment.overallSentiment === 'Negative'"
         />
       </div>
       <div
@@ -41,25 +56,32 @@
         id="chat"
         class="flex flex-col col-span-3 text-white m-2 p-3 rounded-lg font-mono h-96 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl"
       >
-      <div class="mb-2">CHAT</div>
-      <div id="messages" class="overflow-y-auto text-sm mb-auto h-72 overflow-auto">
-        <div v-for="message in chat" :key="message.timestamp">
-          <span class="text-blue-400">{{ message.username }}&nbsp;</span>
-          <span> {{ message.message }}</span>
+        <div class="mb-2">CHAT</div>
+        <div id="messages" class="overflow-y-auto text-sm mb-auto h-72 overflow-auto">
+          <div v-for="message in chat" :key="message.timestamp">
+            <span class="text-blue-400">{{ message.username }}&nbsp;</span>
+            <span> {{ message.message }}</span>
+          </div>
         </div>
-              </div>
 
         <input
           v-model="messageBox"
+          v-on:keyup.enter="
+            sendMessage();
+            newChatMessageCallback();
+          "
           class="bottom-0 opacity-20 text-white shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
-        <button
+        <!-- <button
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          @click="sendMessage()"
+          @click="
+            sendMessage();
+            newChatMessageCallback();
+          "
           :disabled="messageBox.length === 0"
         >
           Send Chat Message
-        </button>
+        </button> -->
       </div>
     </div>
     <div class="grid grid-cols-12 gap-1">
@@ -67,9 +89,7 @@
         id="stream"
         class="col-span-7 text-white m-2 p-3 rounded-lg font-mono h-56 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl"
       >
-        <LineChart v-bind="lineChartProps" />
-        {{ timeline }}
-        {{ lineChartProps }}
+        <LineChart style="max-height: 100%" v-bind="lineChartProps" />
       </div>
       <div
         id="stream"
@@ -89,12 +109,15 @@ import { Chart, registerables, ChartData, ChartOptions } from 'chart.js';
 
 import { useChatStore } from '../stores';
 
+// import { WordCloud } from '../components/WordCloud';
+
 Chart.register(...registerables);
 
 export default defineComponent({
   name: 'HomeView',
   components: {
     LineChart,
+    // WordCloud,
   },
   data() {
     return {
@@ -132,8 +155,12 @@ export default defineComponent({
       this.time += 1;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      this.autoChatMessage(this.time, this.startTime);
+      this.autoChatMessage(this.time, this.startTime, this.newChatMessageCallback);
+    },
+    newChatMessageCallback() {
       this.updateChart();
+      const objDiv = document.getElementById('messages');
+      objDiv!.scrollTop = objDiv?.scrollHeight || 0;
     },
   },
   setup() {
