@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Launch } from '@/interfaces/launches';
 import { ChatMessage } from '@/interfaces/chat';
 
-export const createChatMessage = async (message: ChatMessage): Promise<boolean> =>
+export const createChatMessage = async (message: ChatMessage): Promise<any> =>
   // eslint-disable-next-line implicit-arrow-linebreak
   axios
     .post('http://localhost:8080/message/', {
