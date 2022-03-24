@@ -19,6 +19,7 @@ type ChatState = {
   chat: ChatMessage[];
   sentiment: Sentiment;
   timeline: Timeline[];
+  wordCloud: [];
 };
 
 const messages = [
@@ -113,52 +114,52 @@ const messages = [
     username: 'proGamerLPHD',
   },
   {
-    message: 'Heyyyyyyy, heyyyy babyyyy',
+    message: 'I love you',
     timestamp: 20,
     username: 'proGamerLPHD',
   },
   {
-    message: 'Heyyyyyyy, heyyyy babyyyy',
+    message: 'I love you',
     timestamp: 20,
     username: 'proGamerLPHD',
   },
   {
-    message: 'Heyyyyyyy, heyyyy babyyyy',
+    message: 'I love you',
     timestamp: 20,
     username: 'proGamerLPHD',
   },
   {
-    message: 'Heyyyyyyy, heyyyy babyyyy',
+    message: 'I love you',
     timestamp: 20,
     username: 'proGamerLPHD',
   },
   {
-    message: 'Heyyyyyyy, heyyyy babyyyy',
+    message: 'I love you',
     timestamp: 20,
     username: 'proGamerLPHD',
   },
   {
-    message: 'Heyyyyyyy, heyyyy babyyyy',
+    message: 'I love you',
     timestamp: 20,
     username: 'proGamerLPHD',
   },
   {
-    message: 'Heyyyyyyy, heyyyy babyyyy',
+    message: 'I love you',
     timestamp: 30,
     username: 'proGamerLPHD',
   },
   {
-    message: 'Heyyyyyyy, heyyyy babyyyy',
+    message: 'HI love you',
     timestamp: 30,
     username: 'proGamerLPHD',
   },
   {
-    message: 'Heyyyyyyy, heyyyy babyyyy',
+    message: 'I love you',
     timestamp: 30,
     username: 'proGamerLPHD',
   },
   {
-    message: 'Heyyyyyyy, heyyyy babyyyy',
+    message: 'I love you',
     timestamp: 30,
     username: 'proGamerLPHD',
   },
@@ -334,10 +335,11 @@ export const useChatStore = defineStore('chat', {
         compound: 0,
         negative: 0,
         neutral: 0,
-        overallSentiment: 'string',
+        overallSentiment: 'Neutral',
         positive: 0,
       },
       timeline: [],
+      wordCloud: [],
     }),
   getters: {
     getChat(): ChatMessage[] {
@@ -377,19 +379,21 @@ export const useChatStore = defineStore('chat', {
         });
       }
 
+      console.log(response);
+
       this.chat.push(chatMessage);
     },
-    async autoChatMessage(time: number, timestamp: number) {
+    async autoChatMessage(time: number, timestamp: number, callback: any) {
       const m = messages.filter((x) => x.timestamp === time);
       let counter = 0;
       const min = 500;
       const max = 1500;
       // eslint-disable-next-line no-restricted-syntax
       for (const x of m) {
-        setTimeout(
-          () => this.sendChatMessage(x.message, timestamp, x.username),
-          counter * Math.random() * (max - min) + min,
-        );
+        setTimeout(() => {
+          this.sendChatMessage(x.message, timestamp, x.username);
+          callback();
+        }, counter * Math.random() * (max - min) + min);
         counter += 1;
       }
     },
