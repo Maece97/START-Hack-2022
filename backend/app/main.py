@@ -1,7 +1,7 @@
 from typing import Optional
 from datetime import datetime
-
-from fastapi import FastAPI, Body
+import time
+from fastapi import FastAPI, Body, WebSocket
 
 app = FastAPI()
 
@@ -24,3 +24,13 @@ def post_message(
     timestr = str(datetime.fromtimestamp(timestamp))  
     print("Received message: '{}' at {}".format(message, timestr) )
     return 
+
+@app.websocket("/sentiment-stream")
+async def return_sentiment(
+        websocket: WebSocket,
+):
+    await websocket.accept()
+    while True:
+        result = {"result": 0.23}
+        await websocket.send_text(result)
+        time.sleep(10)
