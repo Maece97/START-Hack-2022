@@ -39,7 +39,7 @@ def video_feed():
 
 @app.post("/message/")
 def post_message(timestamp: int = Body(...), message: str = Body(...)):
-    timestr = str(datetime.fromtimestamp(timestamp))
+    timestr = str(datetime.fromtimestamp(timestamp / 1000))
     print("Received message: '{}' at {}".format(message, timestr))
     return
 
