@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="grid grid-cols-12 gap-1">
-      <div id="avatar" class="col-span-3">Avatar</div>
+      <div id="avatar" class="col-span-3">Avatar<br />{{ sentiment }}</div>
       <div id="stream" class="col-span-6">Stream</div>
       <div id="chat" class="col-span-3">
         <div v-for="message in chat" :key="message.timestamp">
@@ -23,7 +23,7 @@
     </div>
     <div class="grid grid-cols-12 gap-1">
       <div id="stream" class="col-span-7">Line thingy</div>
-      <div id="stream" class="col-span-5">WORD thingy</div>
+      <div id="stream" class="col-span-5"></div>
     </div>
   </div>
 </template>
@@ -56,6 +56,7 @@ export default defineComponent({
 
     return {
       chat: computed(() => chatStore.getChat),
+      sentiment: computed(() => chatStore.getSentiment),
       loading,
       messageBox,
       sendMessage,
