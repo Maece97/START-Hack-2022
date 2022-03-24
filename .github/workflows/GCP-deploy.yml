@@ -44,7 +44,7 @@ jobs:
         run: docker build ./backend -t $BACKEND_IMAGE_NAME
 
       - name: Build Docker image frontend
-        run: docker build ./frontend -t $FRONTEND_IMAGE_NAME
+        run: docker build ./frontend -t $FRONTEND_IMAGE_NAME --target staging
 
       - name: Push Docker image backend
         run: docker push $BACKEND_IMAGE_NAME

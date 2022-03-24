@@ -9,10 +9,8 @@ import json
 import queue
 import subprocess
 
-
 EXAMPLE_VIDEO_PATH = "app/media/example-video.mp4"
 EXAMPLE_AUDIO_PATH = "app/media/example-audio.mp3"
-
 
 received_message: ReceivedMessages = ReceivedMessages()
 
@@ -57,7 +55,7 @@ async def post_message(
             message, str(datetime.fromtimestamp(timestamp / 1000))
         )
     )
-    sentiment: Sentiment = received_message.add_message(
+    received_message.add_message(
         Message(
             username=username,
             timestamp=timestamp,
@@ -65,7 +63,11 @@ async def post_message(
         )
     )
     # await sentiment_queue.put(sentiment)
-    return sentiment.__dict__
+    result_dict = {
+        "avg_sentiment": received_message.get_avg_sentiment().__dict__,
+        "timeline": received_message.get_timeline(),
+    }
+    return result_dict
 
 
 # @app.websocket("/sentiment-stream/")
