@@ -50,9 +50,13 @@ def video_feed():
 
 @app.post("/message/")
 def post_message(
-        username: str = Body(...), timestamp: int = Body(...), message: str = Body(...)
+    username: str = Body(...), timestamp: int = Body(...), message: str = Body(...)
 ):
-    print("Received message: '{}' at {}".format(message, str(datetime.fromtimestamp(timestamp / 1000))))
+    print(
+        "Received message: '{}' at {}".format(
+            message, str(datetime.fromtimestamp(timestamp / 1000))
+        )
+    )
     sentiment: Sentiment = received_message.add_message(
         Message(
             username=username,
@@ -66,7 +70,7 @@ def post_message(
 
 @app.websocket("/sentiment-stream/")
 async def return_sentiment(
-        websocket: WebSocket,
+    websocket: WebSocket,
 ):
     await websocket.accept()
     while True:
