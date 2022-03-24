@@ -370,7 +370,6 @@ export const useChatStore = defineStore('chat', {
       this.timeline = [];
       // eslint-disable-next-line no-restricted-syntax
       for (const [key, value] of Object.entries(response.timeline)) {
-        console.log(`${key}: ${value}`);
         this.timeline.push({
           time: key,
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment

@@ -164,6 +164,7 @@ export default defineComponent({
     const startTime = ref(0);
 
     const dataValues = ref([] as number[]);
+    const dataValues2 = ref([] as number[]);
     const dataLabels = ref([] as string[]);
 
     onMounted(async () => {
@@ -183,7 +184,16 @@ export default defineComponent({
         {
           data: dataValues.value,
           tension: 0.4,
-          borderColor: '#FF0000',
+          borderColor: 'red',
+        },
+        {
+          data: dataValues2.value,
+          tension: 0.4,
+          borderColor: 'white',
+          pointRadius: 0,
+          stepped: true,
+          borderDash: [5, 5],
+          borderWidth: 1,
         },
       ],
     }));
@@ -224,6 +234,7 @@ export default defineComponent({
     const updateChart = () => {
       dataLabels.value = chatStore.getTimeline.map((x) => x.time);
       dataValues.value = chatStore.getTimeline.map((x) => x.value);
+      dataValues2.value = chatStore.getTimeline.map((x) => 0);
     };
 
     return {
