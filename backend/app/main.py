@@ -16,7 +16,7 @@ EXAMPLE_AUDIO_PATH = "app/media/example-audio.mp3"
 
 received_message: ReceivedMessages = ReceivedMessages()
 
-sentiment_queue: queue.Queue[Sentiment] = queue.Queue(maxsize=200)
+sentiment_queue: queue.Queue = queue.Queue(maxsize=200)
 
 app = FastAPI()
 
