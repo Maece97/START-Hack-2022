@@ -16,7 +16,7 @@ EXAMPLE_AUDIO_PATH = "app/media/example-audio.mp3"
 
 received_message: ReceivedMessages = ReceivedMessages()
 
-sentiment_queue: queue.Queue = queue.Queue(maxsize=200)
+# sentiment_queue: queue.Queue = queue.Queue(maxsize=200)
 
 app = FastAPI()
 
@@ -64,15 +64,15 @@ async def post_message(
             message_text=message,
         )
     )
-    await sentiment_queue.put(sentiment)
-    return
+    # await sentiment_queue.put(sentiment)
+    return sentiment.__dict__
 
 
-@app.websocket("/sentiment-stream/")
-async def return_sentiment(
-    websocket: WebSocket,
-):
-    await websocket.accept()
-    while True:
-        msg = await sentiment_queue.get().__dict__
-        await websocket.send_text(msg)
+# @app.websocket("/sentiment-stream/")
+# async def return_sentiment(
+#     websocket: WebSocket,
+# ):
+#     await websocket.accept()
+#     while True:
+#         msg = await sentiment_queue.get().__dict__
+#         await websocket.send_text(msg)
