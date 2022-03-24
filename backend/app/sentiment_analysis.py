@@ -1,9 +1,6 @@
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 
-
-
-
 # calculate the negative, positive, neutral and compound scores, plus verbal evaluation
 def sentiment_vader(sentence):
     # Create a SentimentIntensityAnalyzer object.
@@ -23,6 +20,7 @@ def sentiment_vader(sentence):
 
     else:
         overall_sentiment = "Neutral"
+
 
     return negative, neutral, positive, compound, overall_sentiment
 
