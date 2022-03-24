@@ -41,7 +41,7 @@ def video_feed():
 def post_message(
     username: str = Body(), timestamp: int = Body(...), message: str = Body(...)
 ):
-    timestr = str(datetime.fromtimestamp(timestamp))
+    timestr = str(datetime.fromtimestamp(timestamp / 1000))
     print("Received message: '{}' at {}".format(message, timestr))
     return
 
