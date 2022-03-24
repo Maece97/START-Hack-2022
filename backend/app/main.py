@@ -76,4 +76,3 @@ async def return_sentiment(
     while True:
         msg = await sentiment_queue.get().__dict__
         await websocket.send_text(msg)
-        time.sleep(10)
