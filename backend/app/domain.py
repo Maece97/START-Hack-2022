@@ -68,7 +68,7 @@ class ReceivedMessages:
         ]
 
     def _compute_average_sentiment_over_messages(
-            self, messages: List[Message]
+        self, messages: List[Message]
     ) -> Sentiment:
         positive, negative, neutral, compound = (0, 0, 0, 0)
         n = len(messages)
@@ -105,7 +105,9 @@ class ReceivedMessages:
         for end in range(window_size, n, window_size):
             current_timestamp = self.messages[end].timestamp
             if current_timestamp in timeline.keys():
-                current_timestamp: datetime.datetime = current_timestamp + datetime.timedelta(microseconds=1)
+                current_timestamp: datetime.datetime = (
+                    current_timestamp + datetime.timedelta(microseconds=1)
+                )
                 assert current_timestamp not in timeline.keys()
             current_average_sentiment = self._compute_average_sentiment_over_messages(
                 self.messages[start:end]
@@ -115,48 +117,45 @@ class ReceivedMessages:
         return timeline
 
     def get_sentence_value(
-            self, timestamp: datetime, window_size_in_seconds=5
+        self, current_timestamp: datetime, window_size_in_seconds=5
     ) -> float:
         timeline: Dict[datetime, float] = self.get_timeline(window_size=1)
         keys = timeline.keys()
-        future_keys = [
-            key
-            for key in keys
-            if key >= (timestamp + datetime.timedelta(seconds=window_size_in_seconds))
-        ]
-        print("DEBUG")
-        print(timeline)
-        print(timestamp + datetime.timedelta(seconds=window_size_in_seconds))
-        print(len(future_keys))
-        print("DEBUG END")
+        future_keys = [key for key in keys if key >= current_timestamp]
+        print(f"Timestamp: {current_timestamp} ")
+        # print(f"keys: {keys}")
         if len(future_keys) > 0:
-            start_dict_key = min([key for key in keys if key >= timestamp])
-            end_dict_key = min(
+            print(f"Future keys max:{max(future_keys)} ")
+            start_dict_key = min(
                 [
                     key
                     for key in keys
                     if key
-                       >= (timestamp + datetime.timedelta(seconds=window_size_in_seconds))
+                       >= current_timestamp - datetime.timedelta(seconds=window_size_in_seconds)
                 ]
             )
+            end_dict_key = min([key for key in keys if key >= current_timestamp])
             start_value = timeline[start_dict_key]
             end_value = timeline[end_dict_key]
+            print(f"DIFF: {end_value - start_value}")
             return end_value - start_value
         else:
             return 0
 
-    def get_sentence_map(self, video_start_timestamp: datetime.datetime) -> Dict[str, float]:
-        current_time = datetime.datetime.now()
+    def get_sentence_map(
+        self, video_start_timestamp: datetime.datetime, message_timestamp: datetime.datetime
+    ) -> Dict[str, float]:
+        current_time = message_timestamp
         relative_time = current_time - video_start_timestamp
         relative_time_seconds = relative_time.seconds
-        closest_key = min(SAMPLE_SCRIPT.keys(), key=lambda x: abs((x-5) - relative_time_seconds))
-        sentence: str = SAMPLE_SCRIPT[closest_key]
-        self.receive_spoken_sentence(
-            timestamp=current_time,
-            sentence=sentence,
+        closest_key = min(
+            SAMPLE_SCRIPT.keys(), key=lambda x: abs(x - (relative_time_seconds - 5))
         )
+        print(f"closest_key: {closest_key}")
+        sentence: str = SAMPLE_SCRIPT[closest_key]
+
+        sentence_value = self.get_sentence_value(current_timestamp=current_time)
+        self.sentence_map.update(sentence=sentence, sentence_value=sentence_value)
         return self.sentence_map.get_sentences()
 
-    def receive_spoken_sentence(self, timestamp, sentence):
-        sentence_value = self.get_sentence_value(timestamp=timestamp)
-        self.sentence_map.update(sentence=sentence, sentence_value=sentence_value)
+
