@@ -7,8 +7,12 @@ from starlette.middleware.cors import CORSMiddleware
 from domain import ReceivedMessages, Message, Sentiment
 import json
 import queue
+import subprocess
 
-EXAMPLE_VIDEO_PATH = "app/example-video.mp4"
+
+EXAMPLE_VIDEO_PATH = "app/media/example-video.mp4"
+EXAMPLE_AUDIO_PATH = "app/media/example-audio.mp3"
+
 
 received_message: ReceivedMessages = ReceivedMessages()
 
