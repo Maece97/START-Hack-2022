@@ -2,7 +2,14 @@
   <div class="home">
     <div class="grid grid-cols-12 gap-1">
       <div id="avatar" class="col-span-3">Avatar<br />{{ sentiment }}</div>
-      <div id="stream" class="col-span-6">Stream</div>
+      <div id="stream" class="col-span-6">
+        <video width="320" height="240" controls @playing="startPlaying" @pause="updatePaused">
+          <source src="http://localhost:8080/video/" type="video/mp4" />
+          <track kind="captions" />
+          Your browser does not support the video tag.
+        </video>
+        {{ time }}
+      </div>
       <div id="chat" class="col-span-3">
         <div v-for="message in chat" :key="message.timestamp">
           <span class="text-blue-400">{{ message.username }}&nbsp;</span>
@@ -38,7 +45,38 @@ export default defineComponent({
   name: 'HomeView',
   components: {},
   data() {
-    return {};
+    return {
+      videoElement: null,
+      time: 0,
+      isRunning: false,
+      interval: null,
+    };
+  },
+  methods: {
+    startPlaying(event: any) {
+      console.log('test1');
+      this.videoElement = event.target;
+      this.toggleTimer();
+    },
+    updatePaused(event: any) {
+      this.toggleTimer();
+    },
+    toggleTimer() {
+      if (this.isRunning) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        clearInterval(this.interval);
+        console.log('timer stops');
+      } else {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        this.interval = setInterval(this.incrementTime, 1000);
+      }
+      this.isRunning = !this.isRunning;
+    },
+    incrementTime() {
+      this.time += 1;
+    },
   },
   setup() {
     const chatStore = useChatStore();

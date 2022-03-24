@@ -47,7 +47,7 @@ def video_feed():
 
 
 @app.post("/message/")
-async def post_message(
+def post_message(
     username: str = Body(...), timestamp: int = Body(...), message: str = Body(...)
 ):
     print(
