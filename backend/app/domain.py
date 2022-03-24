@@ -1,20 +1,22 @@
 import datetime
 
 from .sentiment_analysis import sentiment_vader, Sentiment
-from typing import List, Tuple
-from datetime import datetime
+from typing import List, Tuple, Dict
+import datetime
 
 
 class Message:
     def __init__(self, username: str, message_text: str, timestamp: float):
         self.username: str = username
         self.message_text: str = message_text
-        self.timestamp: datetime = datetime.fromtimestamp(timestamp / 1000)
+        self.timestamp: datetime.datetime = datetime.datetime.fromtimestamp(
+            timestamp / 1000
+        )
         self.sentiment: Sentiment = sentiment_vader(message_text)
 
 
-def is_not_older_than_x_seconds(timestamp: datetime, seconds: int = 30):
-    difference: datetime.timedelta = datetime.now() - timestamp
+def is_not_older_than_x_seconds(timestamp: datetime.datetime, seconds: int = 30):
+    difference: datetime.timedelta = datetime.datetime.now() - timestamp
     return difference.seconds < seconds
 
 
@@ -60,14 +62,46 @@ class ReceivedMessages:
     def get_word_map(self):
         pass
 
-    def get_timeline(self, window_size: int = 10) -> List[Tuple[datetime, float]]:
+    def get_timeline(self, window_size: int = 10) -> Dict[datetime.datetime, float]:
         start = 0
         n = len(self.messages)
-        timeline: List[Tuple[datetime, float]] = []
+        timeline: Dict[datetime.datetime, float] = {}
         for end in range(0, n, window_size):
             current_timestamp = self.messages[end].timestamp
             current_average_sentiment = self._compute_average_sentiment_over_messages(
                 self.messages[start:end]
             )
-            timeline.append((current_timestamp, current_average_sentiment.compound))
+            timeline[current_timestamp] = current_average_sentiment.compound
         return timeline
+
+    def get_word_map_sentence_value(
+        self, timestamp: datetime, window_size_in_seconds=5
+    ) -> float:
+        timeline: Dict[datetime, float] = self.get_timeline()
+        keys = timeline.keys()
+        future_keys = [
+            key
+            for key in keys
+            if key >= (timestamp + datetime.timedelta(seconds=window_size_in_seconds))
+        ]
+        if len(future_keys) > 0:
+            start_dict_key = min([key for key in keys if key >= timestamp])
+            end_dict_key = min(
+                [
+                    key
+                    for key in keys
+                    if key
+                    >= (timestamp + datetime.timedelta(seconds=window_size_in_seconds))
+                ]
+            )
+            start_value = timeline[start_dict_key]
+            end_value = timeline[end_dict_key]
+            return end_value - start_value
+        else:
+            return 0
+
+
+if __name__ == "__main__":
+    sentence = "Hi I am the Streamer"
+
+    words = sentence.split(" ")
