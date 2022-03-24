@@ -47,7 +47,10 @@ export const useChatStore = defineStore('chat', {
       };
       const response = await createChatMessage(chatMessage);
       console.log(response);
-      this.sentiment = { overallSentiment: response.overall_sentiment, ...response };
+      this.sentiment = {
+        overallSentiment: response.avg_sentiment.overall_sentiment,
+        ...response.avg_sentiment,
+      };
       this.chat.push(chatMessage);
     },
   },
