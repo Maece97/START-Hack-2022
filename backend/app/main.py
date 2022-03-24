@@ -4,8 +4,15 @@ import time
 from fastapi import FastAPI, Body, WebSocket
 from fastapi.responses import StreamingResponse
 from starlette.middleware.cors import CORSMiddleware
+from domain import ReceivedMessages, Message, Sentiment
+import json
+import queue
 
 EXAMPLE_VIDEO_PATH = "app/example-video.mp4"
+
+received_message: ReceivedMessages = ReceivedMessages()
+
+sentiment_queue: queue.Queue[Sentiment] = queue.Queue(maxsize=200)
 
 app = FastAPI()
 
@@ -39,19 +46,27 @@ def video_feed():
 
 @app.post("/message/")
 def post_message(
-    username: str = Body(), timestamp: int = Body(...), message: str = Body(...)
+        username: str = Body(...), timestamp: int = Body(...), message: str = Body(...)
 ):
-    timestr = str(datetime.fromtimestamp(timestamp / 1000))
-    print("Received message: '{}' at {}".format(message, timestr))
+    print("Received message: '{}' at {}".format(message, str(datetime.fromtimestamp(timestamp / 1000))))
+    sentiment: Sentiment = received_message.add_message(
+        Message(
+            username=username,
+            timestamp=timestamp,
+            message_text=message,
+        )
+    )
+    sentiment_queue.put(sentiment)
     return
 
 
 @app.websocket("/sentiment-stream/")
 async def return_sentiment(
-    websocket: WebSocket,
+        websocket: WebSocket,
 ):
     await websocket.accept()
     while True:
-        result = {"result": 0.23}
-        await websocket.send_text(result)
+        if not sentiment_queue.empty():
+            result = json.dumps(sentiment_queue.get().__dict__)
+            await websocket.send_text(result)
         time.sleep(10)
