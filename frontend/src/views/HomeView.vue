@@ -1,6 +1,12 @@
 <template>
   <div class="home">
-    <div class="grid grid-cols-12 gap-1">
+        <img
+          class=""
+          src="../assets/logo_audiment.png"
+          alt="Logo"
+          width="200"
+        >
+      <div class="grid grid-cols-12 gap-1">
       <div
         id="avatar"
         class="col-span-3 text-white m-2 p-3 rounded-lg font-mono h-96 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl"
@@ -31,11 +37,11 @@
       </div>
       <div
         id="stream"
-        class="col-span-6 text-white m-2 p-3 rounded-lg font-mono h-96 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl"
+        class="col-span-6 text-white m-2 p-3 rounded-lg font-mono h-96 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-blur-md"
       >
         <div class="mb-2">KRISTOFERS STREAM</div>
         <video
-          class="flex items-center mx-auto rounded-lg"
+          class="flex flex-col items-center mx-auto rounded-lg"
           width="550"
           controls
           @playing="startPlaying"
