@@ -4,8 +4,12 @@ import time
 from fastapi import FastAPI, Body, WebSocket
 from fastapi.responses import StreamingResponse
 from starlette.middleware.cors import CORSMiddleware
+import subprocess
 
-EXAMPLE_VIDEO_PATH = "app/example-video.mp4"
+
+EXAMPLE_VIDEO_PATH = "app/media/example-video.mp4"
+EXAMPLE_AUDIO_PATH = "app/media/example-audio.mp3"
+
 
 app = FastAPI()
 
