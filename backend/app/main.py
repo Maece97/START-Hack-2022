@@ -9,7 +9,7 @@ import json
 import queue
 import subprocess
 
-EXAMPLE_VIDEO_PATH = "app/media/example-video.mp4"
+EXAMPLE_VIDEO_PATH = "app/media/kris_rant2.mp4"
 EXAMPLE_AUDIO_PATH = "app/media/example-audio.mp3"
 
 received_message: ReceivedMessages = ReceivedMessages()
@@ -48,7 +48,10 @@ def video_feed():
 
 @app.post("/message/")
 def post_message(
-    username: str = Body(...), timestamp: int = Body(...), message: str = Body(...)
+    username: str = Body(...),
+    timestamp: int = Body(...),
+    message: str = Body(...),
+    startTime: int = Body(...),
 ):
     print(
         "Received message: '{}' at {}".format(
@@ -65,8 +68,11 @@ def post_message(
     # await sentiment_queue.put(sentiment)
     result_dict = {
         "avg_sentiment": received_message.get_avg_sentiment().__dict__,
-        "timeline": received_message.get_timeline(),
-        "word_map": {},
+        "timeline": received_message.get_timeline(window_size=3),
+        "sentence_map": received_message.get_sentence_map(
+            datetime.fromtimestamp(startTime / 1000),
+            message_timestamp=datetime.fromtimestamp(timestamp / 1000),
+        ),
     }
     return result_dict
 
