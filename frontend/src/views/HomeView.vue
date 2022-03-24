@@ -61,7 +61,7 @@
         id="stream"
         class="col-span-7 text-white m-2 p-3 rounded-lg font-mono h-56 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl"
       >
-        <LineChart v-bind="lineChartRef" />
+        <LineChart v-bind="lineChartProps" />
         {{ timeline }}
         {{ lineChartProps }}
       </div>
@@ -78,7 +78,8 @@
 import { defineComponent, onMounted, ref, computed } from 'vue';
 
 import { LineChart, useLineChart } from 'vue-chart-3';
-import { Chart, registerables } from 'chart.js';
+// eslint-disable-next-line object-curly-newline
+import { Chart, registerables, ChartData, ChartOptions } from 'chart.js';
 
 import { useChatStore } from '../stores';
 
@@ -99,7 +100,6 @@ export default defineComponent({
   },
   methods: {
     startPlaying(event: any) {
-      console.log('test1');
       this.videoElement = event.target;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -127,6 +127,7 @@ export default defineComponent({
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       this.autoChatMessage(this.time, this.startTime);
+      this.updateChart();
     },
   },
   setup() {
@@ -135,6 +136,9 @@ export default defineComponent({
     const messageBox = ref('');
     const startTime = ref(0);
 
+    const dataValues = ref([] as number[]);
+    const dataLabels = ref([] as string[]);
+
     onMounted(async () => {
       loading.value = false;
     });
@@ -142,21 +146,22 @@ export default defineComponent({
     const sendMessage = () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      chatStore.sendChatMessage(messageBox.value, startTime);
+      chatStore.sendChatMessage(messageBox.value, startTime.value);
       messageBox.value = '';
     };
 
-    const lineData = {
-      labels: chatStore.getTimeline.map((x) => x.time),
+    const lineData = computed<ChartData<'line'>>(() => ({
+      labels: dataLabels.value,
       datasets: [
         {
-          data: chatStore.getTimeline.map((x) => x.value),
+          data: dataValues.value,
           tension: 0.4,
+          borderColor: '#FF0000',
         },
       ],
-    };
+    }));
 
-    const options = {
+    const options = computed<ChartOptions<'line'>>(() => ({
       plugins: {
         legend: {
           display: false,
@@ -182,12 +187,17 @@ export default defineComponent({
           suggestedMax: 1.5,
         },
       },
-    };
+    }));
 
     const { lineChartProps, lineChartRef } = useLineChart({
       chartData: lineData,
       options,
     });
+
+    const updateChart = () => {
+      dataLabels.value = chatStore.getTimeline.map((x) => x.time);
+      dataValues.value = chatStore.getTimeline.map((x) => x.value);
+    };
 
     return {
       chat: computed(() => chatStore.getChat),
@@ -200,6 +210,7 @@ export default defineComponent({
       autoChatMessage: chatStore.autoChatMessage,
       lineChartRef,
       startTime,
+      updateChart,
     };
   },
 });

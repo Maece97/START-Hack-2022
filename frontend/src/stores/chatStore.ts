@@ -359,9 +359,7 @@ export const useChatStore = defineStore('chat', {
         startTime,
         username: username || 'xxGamer2001xx',
       };
-      console.log(chatMessage);
       const response = await createChatMessage(chatMessage);
-      console.log(response);
       this.sentiment = {
         overallSentiment: response.avg_sentiment.overall_sentiment,
         ...response.avg_sentiment,
