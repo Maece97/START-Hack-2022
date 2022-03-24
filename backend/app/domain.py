@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 class Message:
-    def __init__(self, username: str, message_text: str, timestamp: int):
+    def __init__(self, username: str, message_text: str, timestamp: float):
         self.username: str = username
         self.message_text: str = message_text
         self.timestamp: datetime = datetime.fromtimestamp(timestamp / 1000)
@@ -23,22 +23,27 @@ class ReceivedMessages:
         self.messages: List[Message] = []
 
     def _get_relevant_messages(self):
-        return [message for message in self.messages if is_not_older_than_x_seconds(message.timestamp)]
+        return [
+            message
+            for message in self.messages
+            if is_not_older_than_x_seconds(message.timestamp)
+        ]
 
     def add_message(self, message: Message):
-        self.messages += [message]
+        self.messages.append(message)
         relevant_messages: List[Message] = self._get_relevant_messages()
         positive, negative, neutral, compound = (0, 0, 0, 0)
         n = len(relevant_messages)
-        for message in relevant_messages:
-            positive += message.sentiment.positive
-            neutral += message.sentiment.neutral
-            negative += message.sentiment.negative
-            compound += message.sentiment.compound
-        positive /= n
-        neutral /= n
-        negative /= n
-        compound /= n
+        if n > 0:
+            for message in relevant_messages:
+                positive += message.sentiment.positive
+                neutral += message.sentiment.neutral
+                negative += message.sentiment.negative
+                compound += message.sentiment.compound
+            positive /= n
+            neutral /= n
+            negative /= n
+            compound /= n
 
         return Sentiment(
             positive=positive, negative=negative, neutral=neutral, compound=compound
