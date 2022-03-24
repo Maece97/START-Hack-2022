@@ -10,12 +10,15 @@
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "ios:serve": "npx cap run ios"
+    "ios:serve": "npx cap run ios",
+    "ios:open": "npx cap open ios",
+    "ios:sync": "npx cap sync ios"
   },
   "main": "background.js",
   "dependencies": {
     "@capacitor/cli": "^3.4.3",
     "@capacitor/core": "^3.4.3",
+    "@capacitor/geolocation": "^1.3.1",
     "@capacitor/ios": "^3.4.3",
     "@vue/compiler-sfc": "^3.2.31",
     "axios": "^0.26.1",
