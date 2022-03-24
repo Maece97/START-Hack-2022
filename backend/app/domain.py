@@ -20,9 +20,28 @@ def is_not_older_than_x_seconds(timestamp: datetime.datetime, seconds: int = 30)
     return difference.seconds < seconds
 
 
+class SentenceMap:
+    def __init__(self):
+        sentences: Dict[str, float] = {}
+
+    def clear(self):
+        self.sentences = {}
+
+    def update(self, sentence: str, sentence_value: float):
+        if sentence in self.sentences.keys():
+            self.sentences[sentence] += sentence_value
+        else:
+            self.sentences[sentence] = sentence_value
+
+
 class ReceivedMessages:
     def __init__(self):
         self.messages: List[Message] = []
+        self.sentence_map = SentenceMap()
+
+    def clear(self):
+        self.messages = []
+        self.sentence_map.clear()
 
     def _get_relevant_messages(self):
         return [
@@ -74,7 +93,7 @@ class ReceivedMessages:
             timeline[current_timestamp] = current_average_sentiment.compound
         return timeline
 
-    def get_word_map_sentence_value(
+    def get_sentence_value(
         self, timestamp: datetime, window_size_in_seconds=5
     ) -> float:
         timeline: Dict[datetime, float] = self.get_timeline()
@@ -100,8 +119,6 @@ class ReceivedMessages:
         else:
             return 0
 
-
-if __name__ == "__main__":
-    sentence = "Hi I am the Streamer"
-
-    words = sentence.split(" ")
+    def receive_spoken_sentence(self, timestamp, sentence):
+        sentence_value = self.get_sentence_value(timestamp=timestamp)
+        self.sentence_map.update(sentence=sentence, sentence_value=sentence_value)
