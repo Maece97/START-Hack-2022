@@ -2,19 +2,23 @@ from typing import Optional
 from datetime import datetime
 import time
 from fastapi import FastAPI, Body, WebSocket
+from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+EXAMPLE_VIDEO_PATH = "example-video.mp4"
 
-origins = ["*"]
+def create_app() -> CORSMiddleware:
+    """Create app wrapper to overcome middleware issues."""
+    fastapi_app = FastAPI()
+    return CORSMiddleware(
+        fastapi_app,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app = create_app()
 
 @app.get("/")
 def read_root():
@@ -35,7 +39,16 @@ def post_message(
     print("Received message: '{}' at {}".format(message, timestr) )
     return 
 
-@app.websocket("/sentiment-stream")
+
+@app.get("/video/")
+def video_feed():
+    def iterfile():  
+        with open(EXAMPLE_VIDEO_PATH, mode="rb") as file_like: 
+            yield from file_like 
+    return StreamingResponse(iterfile(), media_type="video/mp4")
+
+
+@app.websocket("/sentiment-stream/")
 async def return_sentiment(
         websocket: WebSocket,
 ):
