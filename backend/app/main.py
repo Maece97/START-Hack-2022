@@ -2,9 +2,24 @@ from typing import Optional
 from datetime import datetime
 import time
 from fastapi import FastAPI, Body, WebSocket
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+origins = [
+    "http://start-hack-2022-xertbtzkda-uc.a.run.app",
+    "https://start-hack-2022-xertbtzkda-uc.a.run.app",
+    "http://localhost",
+    "http://localhost:8080",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def read_root():
