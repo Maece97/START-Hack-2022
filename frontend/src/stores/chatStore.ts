@@ -15,11 +15,16 @@ interface Timeline {
   value: number;
 }
 
+interface WordCloud {
+  text: string;
+  value: number;
+}
+
 type ChatState = {
   chat: ChatMessage[];
   sentiment: Sentiment;
   timeline: Timeline[];
-  wordCloud: [];
+  wordCloud: WordCloud[];
 };
 
 const messages = [
@@ -351,6 +356,9 @@ export const useChatStore = defineStore('chat', {
     getTimeline(): Timeline[] {
       return this.timeline;
     },
+    getWordCloud(): WordCloud[] {
+      return this.wordCloud.slice(0, 4);
+    },
   },
   actions: {
     // any amount of arguments, return a promise or not
@@ -370,9 +378,19 @@ export const useChatStore = defineStore('chat', {
       this.timeline = [];
       // eslint-disable-next-line no-restricted-syntax
       for (const [key, value] of Object.entries(response.timeline)) {
-        console.log(`${key}: ${value}`);
         this.timeline.push({
           time: key,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          value,
+        });
+      }
+
+      this.wordCloud = [];
+      // eslint-disable-next-line no-restricted-syntax
+      for (const [key, value] of Object.entries(response.sentence_map)) {
+        this.wordCloud.push({
+          text: key,
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           value,
