@@ -5,7 +5,7 @@ from fastapi import FastAPI, Body, WebSocket
 from fastapi.responses import StreamingResponse
 from starlette.middleware.cors import CORSMiddleware
 
-EXAMPLE_VIDEO_PATH = "example-video.mp4"
+EXAMPLE_VIDEO_PATH = "app/example-video.mp4"
 
 app = FastAPI()
 
@@ -38,7 +38,9 @@ def video_feed():
 
 
 @app.post("/message/")
-def post_message(timestamp: int = Body(...), message: str = Body(...)):
+def post_message(
+    username: str = Body(), timestamp: int = Body(...), message: str = Body(...)
+):
     timestr = str(datetime.fromtimestamp(timestamp))
     print("Received message: '{}' at {}".format(message, timestr))
     return
