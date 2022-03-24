@@ -5,6 +5,12 @@ from typing import List, Tuple, Dict
 import datetime
 
 
+SAMPLE_SCRIPT: Dict[int, str] = {
+    10: "Hello I am Kristoffer",
+    20: "I like turtles",
+}
+
+
 class Message:
     def __init__(self, username: str, message_text: str, timestamp: float):
         self.username: str = username
@@ -22,7 +28,7 @@ def is_not_older_than_x_seconds(timestamp: datetime.datetime, seconds: int = 30)
 
 class SentenceMap:
     def __init__(self):
-        sentences: Dict[str, float] = {}
+        self.sentences: Dict[str, float] = {}
 
     def clear(self):
         self.sentences = {}
@@ -33,6 +39,8 @@ class SentenceMap:
         else:
             self.sentences[sentence] = sentence_value
 
+    def get_sentences(self):
+        return self.sentences
 
 class ReceivedMessages:
     def __init__(self):
@@ -118,6 +126,18 @@ class ReceivedMessages:
             return end_value - start_value
         else:
             return 0
+
+    def get_sentence_map(self, video_start_timestamp: datetime.datetime) -> Dict[str, float]:
+        current_time = datetime.datetime.now()
+        relative_time = current_time - video_start_timestamp
+        relative_time_seconds = relative_time.seconds
+        closest_key = min(SAMPLE_SCRIPT.keys(), key=lambda x: abs(x - relative_time_seconds))
+        sentence: str = SAMPLE_SCRIPT[closest_key]
+        self.receive_spoken_sentence(
+            timestamp=current_time,
+            sentence=sentence,
+        )
+        return self.sentence_map.get_sentences()
 
     def receive_spoken_sentence(self, timestamp, sentence):
         sentence_value = self.get_sentence_value(timestamp=timestamp)
