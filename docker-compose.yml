@@ -11,6 +11,15 @@ services:
     volumes:
       - ./frontend/src:/opt/app/src
       - ./frontend/public:/opt/app/public
+  backend-hack:
+    container_name: backend-hack
+    build:
+      context: "./backend"
+      dockerfile: "Dockerfile"
+      target: development
+    ports:
+      - "8080:8080"
+
   # maria-db-hack:
   #   image: mariadb:10.4.18
   #   restart: always
