@@ -96,7 +96,6 @@ export default defineComponent({
   },
   methods: {
     startPlaying(event: any) {
-      console.log('test1');
       this.videoElement = event.target;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -143,7 +142,7 @@ export default defineComponent({
     const sendMessage = () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      chatStore.sendChatMessage(messageBox.value, startTime);
+      chatStore.sendChatMessage(messageBox.value, startTime.value);
       messageBox.value = '';
     };
 
