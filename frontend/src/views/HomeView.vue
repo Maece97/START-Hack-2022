@@ -1,19 +1,28 @@
 <template>
   <div class="home">
     <div class="grid grid-cols-12 gap-1">
-      <div id="avatar" class="col-span-3">Avatar<br />{{ sentiment }}</div>
-      <div id="stream" class="col-span-6">Stream</div>
-      <div id="chat" class="col-span-3">
+      <div id="avatar" class="col-span-3 text-white m-2 p-3 rounded-lg font-mono h-96 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl" style="backdrop-filter: blur(20px);">AUDITAR<br /><!--{{ sentiment }}-->
+      <img class="flex items-center mx-auto mt-10 filter drop-shadow-2xl" src="../assets/happy.png" alt="Happy Avatar" width="200">
+      </div>
+      <div id="stream" class="col-span-6 text-white m-2 p-3 rounded-lg font-mono h-96 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl">
+        <div class="mb-2">KRISTOFERS STREAM</div>
+        <video class="flex items-center mx-auto rounded-lg" width="550" controls @playing="startPlaying" @pause="updatePaused">
+          <source src="http://localhost:8080/video/" type="video/mp4" />
+          <track kind="captions" />
+          Your browser does not support the video tag.
+        </video>
+</div>
+      <div id="chat" class="flex items-end mx-auto col-span-3 text-white m-2 p-3 rounded-lg font-mono h-96 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl">
         <div v-for="message in chat" :key="message.timestamp">
           <span class="text-blue-400">{{ message.username }}&nbsp;</span>
           <span> {{ message.message }}</span>
         </div>
         <input
           v-model="messageBox"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          class="content-end shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
         <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded "
           @click="sendMessage()"
           :disabled="messageBox.length === 0"
         >
@@ -22,8 +31,8 @@
       </div>
     </div>
     <div class="grid grid-cols-12 gap-1">
-      <div id="stream" class="col-span-7">Line thingy</div>
-      <div id="stream" class="col-span-5"></div>
+      <div id="stream" class="col-span-7 text-white m-2 p-3 rounded-lg font-mono h-56 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl">Line thingy</div>
+      <div id="stream" class="col-span-5 text-white m-2 p-3 rounded-lg font-mono h-56 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl"></div>
     </div>
   </div>
 </template>
@@ -38,7 +47,38 @@ export default defineComponent({
   name: 'HomeView',
   components: {},
   data() {
-    return {};
+    return {
+      videoElement: null,
+      time: 0,
+      isRunning: false,
+      interval: null,
+    };
+  },
+  methods: {
+    startPlaying(event: any) {
+      console.log('test1');
+      this.videoElement = event.target;
+      this.toggleTimer();
+    },
+    updatePaused(event: any) {
+      this.toggleTimer();
+    },
+    toggleTimer() {
+      if (this.isRunning) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        clearInterval(this.interval);
+        console.log('timer stops');
+      } else {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        this.interval = setInterval(this.incrementTime, 1000);
+      }
+      this.isRunning = !this.isRunning;
+    },
+    incrementTime() {
+      this.time += 1;
+    },
   },
   setup() {
     const chatStore = useChatStore();
@@ -67,12 +107,12 @@ export default defineComponent({
 
 <style scoped>
 #avatar {
-  border: solid 1px black;
+  border: solid 1px white;
 }
 #stream {
-  border: solid 1px black;
+  border: solid 1px white;
 }
 #chat {
-  border: solid 1px black;
+  border: solid 1px white;
 }
 </style>

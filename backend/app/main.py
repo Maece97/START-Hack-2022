@@ -66,6 +66,7 @@ def post_message(
     result_dict = {
         "avg_sentiment": received_message.get_avg_sentiment().__dict__,
         "timeline": received_message.get_timeline(),
+        "word_map": {},
     }
     return result_dict
 
