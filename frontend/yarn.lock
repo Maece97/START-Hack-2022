@@ -10546,6 +10546,11 @@ vue@^3.2.13:
     "@vue/server-renderer" "3.2.31"
     "@vue/shared" "3.2.31"
 
+vuewordcloud@^18.7.12:
+  version "18.7.12"
+  resolved "https://registry.yarnpkg.com/vuewordcloud/-/vuewordcloud-18.7.12.tgz#7cd02aafc57315f0548c9b9940f9f5e9de1d07f6"
+  integrity sha512-0oqqI47bGj+PxHSFrFe+8EAj1Vwb2lXj0EYFz9a1PO7CuGDCPjxdYKOPN4TlWuXYsstZX8lQTVRkCPEjE55PiA==
+
 watchpack-chokidar2@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/watchpack-chokidar2/-/watchpack-chokidar2-2.0.1.tgz#38500072ee6ece66f3769936950ea1771be1c957"
