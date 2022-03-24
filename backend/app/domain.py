@@ -4,10 +4,18 @@ from .sentiment_analysis import sentiment_vader, Sentiment
 from typing import List, Tuple, Dict
 import datetime
 
-
 SAMPLE_SCRIPT: Dict[int, str] = {
     10: "Hello I am Kristoffer",
     20: "I like turtles",
+    21: "I like turtles i th",
+    22: "I like turtles as",
+    23: "I like turtlesewr",
+    24: "I like turtles we",
+    25: "I like turtles we",
+    26: "I like turtles we",
+    27: "I like turtles we",
+    28: "I like turtles we",
+    29: "I like turtles we",
 }
 
 
@@ -42,6 +50,7 @@ class SentenceMap:
     def get_sentences(self):
         return self.sentences
 
+
 class ReceivedMessages:
     def __init__(self):
         self.messages: List[Message] = []
@@ -59,7 +68,7 @@ class ReceivedMessages:
         ]
 
     def _compute_average_sentiment_over_messages(
-        self, messages: List[Message]
+            self, messages: List[Message]
     ) -> Sentiment:
         positive, negative, neutral, compound = (0, 0, 0, 0)
         n = len(messages)
@@ -93,16 +102,20 @@ class ReceivedMessages:
         start = 0
         n = len(self.messages)
         timeline: Dict[datetime.datetime, float] = {}
-        for end in range(0, n, window_size):
+        for end in range(window_size, n, window_size):
             current_timestamp = self.messages[end].timestamp
+            if current_timestamp in timeline.keys():
+                current_timestamp: datetime.datetime = current_timestamp + datetime.timedelta(microseconds=1)
+                assert current_timestamp not in timeline.keys()
             current_average_sentiment = self._compute_average_sentiment_over_messages(
                 self.messages[start:end]
             )
             timeline[current_timestamp] = current_average_sentiment.compound
+            start += window_size
         return timeline
 
     def get_sentence_value(
-        self, timestamp: datetime, window_size_in_seconds=5
+            self, timestamp: datetime, window_size_in_seconds=5
     ) -> float:
         timeline: Dict[datetime, float] = self.get_timeline()
         keys = timeline.keys()
@@ -118,7 +131,7 @@ class ReceivedMessages:
                     key
                     for key in keys
                     if key
-                    >= (timestamp + datetime.timedelta(seconds=window_size_in_seconds))
+                       >= (timestamp + datetime.timedelta(seconds=window_size_in_seconds))
                 ]
             )
             start_value = timeline[start_dict_key]

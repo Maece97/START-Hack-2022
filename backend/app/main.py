@@ -65,8 +65,8 @@ def post_message(
     # await sentiment_queue.put(sentiment)
     result_dict = {
         "avg_sentiment": received_message.get_avg_sentiment().__dict__,
-        "timeline": received_message.get_timeline(),
-        "word_map": received_message.get_sentence_map(datetime.fromtimestamp(startTime / 1000)),
+        "timeline": received_message.get_timeline(window_size=3),
+        "sentence_map": received_message.get_sentence_map(datetime.fromtimestamp(startTime / 1000)),
     }
     return result_dict
 
