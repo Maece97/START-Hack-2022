@@ -21,6 +21,10 @@
         </button>
       </div>
     </div>
+    <div class="grid grid-cols-12 gap-1">
+      <div id="stream" class="col-span-7">Line thingy</div>
+      <div id="stream" class="col-span-5">WORD thingy</div>
+    </div>
   </div>
 </template>
 
