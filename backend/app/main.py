@@ -4,7 +4,7 @@ import time
 from fastapi import FastAPI, Body, WebSocket
 from fastapi.responses import StreamingResponse
 from starlette.middleware.cors import CORSMiddleware
-from domain import ReceivedMessages, Message, Sentiment
+from .domain import ReceivedMessages, Message, Sentiment
 import json
 import queue
 import subprocess

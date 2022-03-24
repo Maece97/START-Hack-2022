@@ -1,5 +1,6 @@
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
+
 class Sentiment:
     def __init__(self, positive: int, negative: int, neutral: int, compound: int):
         self.positive: int = positive

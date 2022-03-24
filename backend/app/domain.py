@@ -1,6 +1,6 @@
 import datetime
 
-from sentiment_analysis import sentiment_vader, Sentiment
+from .sentiment_analysis import sentiment_vader, Sentiment
 from typing import List
 from datetime import datetime
 
