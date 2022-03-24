@@ -1,12 +1,7 @@
 <template>
   <div class="home">
-        <img
-          class=""
-          src="../assets/logo_audiment.png"
-          alt="Logo"
-          width="200"
-        >
-      <div class="grid grid-cols-12 gap-1">
+    <img class="" src="../assets/logo_audiment.png" alt="Logo" width="200" />
+    <div class="grid grid-cols-12 gap-1">
       <div
         id="avatar"
         class="col-span-3 text-white m-2 p-3 rounded-lg font-mono h-96 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl"
@@ -94,8 +89,33 @@
       <div
         id="stream"
         class="col-span-5 text-white m-2 p-3 rounded-lg font-mono h-56 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl"
-      ></div>
+      >
+        <ul class="cloud" role="navigation" aria-label="Webdev word cloud">
+          <!-- <li><a href="#" data-weight="4">HTTP</a></li>
+          <li><a href="#" data-weight="1">Ember</a></li>
+          <li><a href="#" data-weight="5">Sass</a></li>
+          <li><a href="#" data-weight="8">HTML</a></li>
+          <li><a href="#" data-weight="6">FlexBox</a></li>
+          <li><a href="#" data-weight="4">API</a></li>
+          <li><a href="#" data-weight="5">VueJS</a></li>
+          <li><a href="#" data-weight="6">Grid</a></li>
+          <li><a href="#" data-weight="2">Rest</a></li>
+          <li><a href="#" data-weight="9">JavaScript</a></li>
+          <li><a href="#" data-weight="3">Animation</a></li>
+          <li><a href="#" data-weight="7">React</a></li>
+          <li><a href="#" data-weight="8">CSS</a></li>
+          <li><a href="#" data-weight="1">Cache</a></li>
+          <li><a href="#" data-weight="3">Less</a></li> -->
+          <li v-for="word in wordCloud" :key="word.text">
+            <a href="#" :data-weight="word.value">{{ word.text }}</a>
+          </li>
+        </ul>
+
+        {{ wordCloud }}
+      </div>
     </div>
+    <div id="my_canvas"></div>
+    <cloud :data="words" :fontSizeMapper="fontSizeMapper" />
   </div>
 </template>
 
@@ -107,6 +127,7 @@ import { LineChart, useLineChart } from 'vue-chart-3';
 // eslint-disable-next-line object-curly-newline
 import { Chart, registerables, ChartData, ChartOptions } from 'chart.js';
 
+import { WordCloudChart } from 'chartjs-chart-wordcloud';
 import { useChatStore } from '../stores';
 
 // import { WordCloud } from '../components/WordCloud';
@@ -117,7 +138,6 @@ export default defineComponent({
   name: 'HomeView',
   components: {
     LineChart,
-    // WordCloud,
   },
   data() {
     return {
@@ -125,6 +145,19 @@ export default defineComponent({
       time: 0,
       isRunning: false,
       interval: null,
+      type: 'wordCloud',
+      data: {
+        // text
+        labels: ['Hello', 'world', 'normally', 'you', 'want', 'more', 'words', 'than', 'this'],
+        datasets: [
+          {
+            label: 'DS',
+            // size in pixel
+            data: [90, 80, 70, 60, 50, 40, 30, 20, 10],
+          },
+        ],
+      },
+      options: {},
     };
   },
   methods: {
@@ -247,6 +280,7 @@ export default defineComponent({
       chat: computed(() => chatStore.getChat),
       sentiment: computed(() => chatStore.getSentiment),
       timeline: computed(() => chatStore.getTimeline),
+      wordCloud: computed(() => chatStore.getWordCloud),
       loading,
       messageBox,
       sendMessage,
@@ -269,5 +303,106 @@ export default defineComponent({
 }
 #chat {
   border: solid 1px white;
+}
+
+ul.cloud {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  line-height: 2.75rem;
+  width: 450px;
+}
+
+ul.cloud a {
+  /*
+  Not supported by any browser at the moment :(
+  --size: attr(data-weight number);
+  */
+  --size: 4;
+  --color: #a33;
+  color: var(--color);
+  font-size: calc(var(--size) * 0.25rem + 0.5rem);
+  display: block;
+  padding: 0.125rem 0.25rem;
+  position: relative;
+  text-decoration: none;
+  /*
+  For different tones of a single color
+  opacity: calc((15 - (9 - var(--size))) / 15);
+  */
+}
+
+ul.cloud a[data-weight='1'] {
+  --size: 1;
+}
+ul.cloud a[data-weight='2'] {
+  --size: 2;
+}
+ul.cloud a[data-weight='3'] {
+  --size: 3;
+}
+ul.cloud a[data-weight='4'] {
+  --size: 4;
+}
+ul.cloud a[data-weight='5'] {
+  --size: 6;
+}
+ul.cloud a[data-weight='6'] {
+  --size: 8;
+}
+ul.cloud a[data-weight='7'] {
+  --size: 10;
+}
+ul.cloud a[data-weight='8'] {
+  --size: 13;
+}
+ul.cloud a[data-weight='9'] {
+  --size: 16;
+}
+
+ul[data-show-value] a::after {
+  content: ' (' attr(data-weight) ')';
+  font-size: 1rem;
+}
+
+ul.cloud li:nth-child(2n + 1) a {
+  --color: #181;
+}
+ul.cloud li:nth-child(3n + 1) a {
+  --color: #33a;
+}
+ul.cloud li:nth-child(4n + 1) a {
+  --color: #c38;
+}
+
+ul.cloud a:focus {
+  outline: 1px dashed;
+}
+
+ul.cloud a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: 100%;
+  background: var(--color);
+  transform: translate(-50%, 0);
+  opacity: 0.15;
+  transition: width 0.25s;
+}
+
+ul.cloud a:focus::before,
+ul.cloud a:hover::before {
+  width: 100%;
+}
+
+@media (prefers-reduced-motion) {
+  ul.cloud * {
+    transition: none !important;
+  }
 }
 </style>

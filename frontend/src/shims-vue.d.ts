@@ -6,3 +6,4 @@ declare module '*.vue' {
 }
 
 declare module 'vuewordcloud';
+declare module 'vue-d3-cloud';

@@ -117,13 +117,18 @@ class ReceivedMessages:
     def get_sentence_value(
             self, timestamp: datetime, window_size_in_seconds=5
     ) -> float:
-        timeline: Dict[datetime, float] = self.get_timeline()
+        timeline: Dict[datetime, float] = self.get_timeline(window_size=1)
         keys = timeline.keys()
         future_keys = [
             key
             for key in keys
             if key >= (timestamp + datetime.timedelta(seconds=window_size_in_seconds))
         ]
+        print("DEBUG")
+        print(timeline)
+        print(timestamp + datetime.timedelta(seconds=window_size_in_seconds))
+        print(len(future_keys))
+        print("DEBUG END")
         if len(future_keys) > 0:
             start_dict_key = min([key for key in keys if key >= timestamp])
             end_dict_key = min(
@@ -144,7 +149,7 @@ class ReceivedMessages:
         current_time = datetime.datetime.now()
         relative_time = current_time - video_start_timestamp
         relative_time_seconds = relative_time.seconds
-        closest_key = min(SAMPLE_SCRIPT.keys(), key=lambda x: abs(x - relative_time_seconds))
+        closest_key = min(SAMPLE_SCRIPT.keys(), key=lambda x: abs((x-5) - relative_time_seconds))
         sentence: str = SAMPLE_SCRIPT[closest_key]
         self.receive_spoken_sentence(
             timestamp=current_time,
