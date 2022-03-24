@@ -32,6 +32,19 @@ jobs:
         - name: Checkout repository
           uses: actions/checkout@v2
 
+        - name: Set up Node.js
+          uses: actions/setup-node@v1
+          with:
+          node-version: 14.6
+
+        - name: Install Node.js dependencies
+          working-directory: ./frontend
+          run: yarn
+
+        - name: Build Node.js dependencies
+          working-directory: ./frontend
+          run: yarn build        
+
         - name: Build Docker image backend
           run: docker build ./backend -t $BACKEND_IMAGE_NAME
 
