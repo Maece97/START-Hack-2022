@@ -7,18 +7,16 @@ from starlette.middleware.cors import CORSMiddleware
 
 EXAMPLE_VIDEO_PATH = "example-video.mp4"
 
-def create_app() -> CORSMiddleware:
-    """Create app wrapper to overcome middleware issues."""
-    fastapi_app = FastAPI()
-    return CORSMiddleware(
-        fastapi_app,
-        allow_origins=["*"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+app = FastAPI()
 
-app = create_app()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
+
 
 @app.get("/")
 def read_root():
@@ -30,27 +28,25 @@ def read_item(item_id: int, q: Optional[str] = None):
     return {"item_id": item_id, "q": q}
 
 
-
-@app.post("/message/")
-def post_message(
-        timestamp: int = Body(...), message: str = Body(...)
-):
-    timestr = str(datetime.fromtimestamp(timestamp))  
-    print("Received message: '{}' at {}".format(message, timestr) )
-    return 
-
-
 @app.get("/video/")
 def video_feed():
-    def iterfile():  
-        with open(EXAMPLE_VIDEO_PATH, mode="rb") as file_like: 
-            yield from file_like 
+    def iterfile():
+        with open(EXAMPLE_VIDEO_PATH, mode="rb") as file_like:
+            yield from file_like
+
     return StreamingResponse(iterfile(), media_type="video/mp4")
+
+
+@app.post("/message/")
+def post_message(timestamp: int = Body(...), message: str = Body(...)):
+    timestr = str(datetime.fromtimestamp(timestamp))
+    print("Received message: '{}' at {}".format(message, timestr))
+    return
 
 
 @app.websocket("/sentiment-stream/")
 async def return_sentiment(
-        websocket: WebSocket,
+    websocket: WebSocket,
 ):
     await websocket.accept()
     while True:
