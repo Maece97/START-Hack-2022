@@ -40,25 +40,25 @@ SAMPLE_SCRIPT: Dict[int, str] = {
 # }
 REAL_SCRIPT = {
     3: "Hey guys welcome to the stream",
-    11: "Whats up Marcel?",
-    14: "Hey, Ruben!",
-    22: "Nah, Alex! We're not playing Clash Royal today.",
-    26: "We've got some division rivals to finish.",
-    36: "Man this guy is so lucky Its crazy",
-    51: "How have I not scored yet.",
-    55: "This guy is so fucking bad!",
-    60: "I swear my mother is better!",
+    11: "What's up Marcel?",
+    14: "Hey, Ruben",
+    22: "Nah, Alex! We're not playing Clash Royal today",
+    26: "We've got some division rivals to finish",
+    36: "Man this guy is so lucky, it's crazy",
+    51: "How have I not scored yet",
+    55: "This guy is so f*cking bad",
+    60: "I swear my mother is better",
     
-    65: "No fucking way. You're kidding me!",
+    65: "No f*cking way, you're kidding me",
     70: "If that guy scored there I would've just quit",
-    75: "This fucking virgin does not deserve anything man, rattiest player I've ever played against!",
-    94: "Get in! Get in!",
-    96: "Aight, boys! Let's keep it! Let's keep it clean!",
-    107: "Are you fucking kidding me? This guy is so shit",
+    75: "This f*cking virgin does not deserve anything man, rattiest player I've ever played against",
+    94: "Get in, get in",
+    96: "Aight, boys. Let's keep it, let's keep it clean",
+    107: "Are you f*cking kidding me? This guy is so shit",
     115: "Nah he's just giving that away",
-    120: "That was pretty lucky! That was pretty lucky!",
+    120: "That was pretty lucky, that was pretty lucky",
     127: "SIIIIIUUU!",
-    138: "That was a rough game man! Rough game..."
+    138: "That was a rough game man, rough game"
 }
 
 
