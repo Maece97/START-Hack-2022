@@ -1,13 +1,9 @@
 from typing import Optional
 from datetime import datetime
-import time
-from fastapi import FastAPI, Body, WebSocket
+from fastapi import FastAPI, Body
 from fastapi.responses import StreamingResponse
 from starlette.middleware.cors import CORSMiddleware
-from .domain import ReceivedMessages, Message, Sentiment
-import json
-import queue
-import subprocess
+from .domain import ReceivedMessages, Message
 
 EXAMPLE_VIDEO_PATH = "app/media/kris_rant2.mp4"
 EXAMPLE_AUDIO_PATH = "app/media/example-audio.mp3"
@@ -39,6 +35,8 @@ def read_item(item_id: int, q: Optional[str] = None):
 
 @app.get("/video/")
 def video_feed():
+    received_message.clear()
+
     def iterfile():
         with open(EXAMPLE_VIDEO_PATH, mode="rb") as file_like:
             yield from file_like
@@ -47,7 +45,7 @@ def video_feed():
 
 
 @app.post("/message/")
-def post_message(
+async def post_message(
     username: str = Body(...),
     timestamp: int = Body(...),
     message: str = Body(...),
@@ -65,7 +63,6 @@ def post_message(
             message_text=message,
         )
     )
-    # await sentiment_queue.put(sentiment)
     result_dict = {
         "avg_sentiment": received_message.get_avg_sentiment().__dict__,
         "timeline": received_message.get_timeline(window_size=3),
