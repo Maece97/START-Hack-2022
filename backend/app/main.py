@@ -10,6 +10,8 @@ EXAMPLE_AUDIO_PATH = "app/media/example-audio.mp3"
 
 received_message: ReceivedMessages = ReceivedMessages()
 
+start_time = None
+
 # sentiment_queue: queue.Queue = queue.Queue(maxsize=200)
 
 app = FastAPI()
@@ -35,8 +37,6 @@ def read_item(item_id: int, q: Optional[str] = None):
 
 @app.get("/video/")
 def video_feed():
-    received_message.clear()
-
     def iterfile():
         with open(EXAMPLE_VIDEO_PATH, mode="rb") as file_like:
             yield from file_like
@@ -51,6 +51,14 @@ async def post_message(
     message: str = Body(...),
     startTime: int = Body(...),
 ):
+    global start_time
+    if start_time != None:
+        if startTime != start_time:
+            start_time = startTime
+            received_message.clear()
+    else:
+        start_time = startTime
+
     print(
         "Received message: '{}' at {}".format(
             message, str(datetime.fromtimestamp(timestamp / 1000))
