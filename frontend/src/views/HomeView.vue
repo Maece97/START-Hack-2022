@@ -26,7 +26,7 @@
           class="flex items-center mx-auto mt-10 filter drop-shadow-2xl"
           src="../assets/sad.png"
           alt="Sad Avatar"
-          width="200"
+          width="250"
           v-if="sentiment.overallSentiment === 'Negative'"
         />
       </div>
