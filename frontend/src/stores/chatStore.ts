@@ -224,6 +224,11 @@ const messages = [
     username: 'waterman',
   },
   {
+    message: 'Long live the lost ball',
+    timestamp: 60,
+    username: 'Tomuchsad',
+  },
+  {
     message: 'Chill',
     timestamp: 62,
     username: 'KRISFAN2013',
@@ -265,18 +270,58 @@ const messages = [
   },
   {
     message: 'Dont be mean!',
-    timestamp: 78,
+    timestamp: 79,
     username: 'StreamLover99',
   },
   {
     message: 'That is bad!',
-    timestamp: 78,
+    timestamp: 79,
     username: 'StreamLover99',
   },
   {
-    message: 'It is just a game, no need to insult people!',
-    timestamp: 78,
+    message: 'Dont insult',
+    timestamp: 83,
     username: 'BigBear43',
+  },
+  {
+    message: 'It is just a game, no need to insult people!',
+    timestamp: 80,
+    username: 'BigBear43',
+  },
+  {
+    message: 'WHAT',
+    timestamp: 82,
+    username: 'BigBear43',
+  },
+  {
+    message: 'Dont insult',
+    timestamp: 83,
+    username: 'BigBear43',
+  },
+  {
+    message: 'It is just a game, no need to insult people!',
+    timestamp: 83,
+    username: 'BigBear43',
+  },
+  {
+    message: 'Thats not!',
+    timestamp: 83,
+    username: 'BigBear43',
+  },
+  {
+    message: 'bad',
+    timestamp: 85,
+    username: 'BigBear43',
+  },
+  {
+    message: ';(',
+    timestamp: 85,
+    username: 'BigBear43',
+  },
+  {
+    message: 'OK',
+    timestamp: 88,
+    username: 'PRFGUY',
   },
   {
     message: 'Well, done! Nice Goal',

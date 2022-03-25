@@ -107,28 +107,29 @@
 
       <div
         id="stream"
-        class="col-span-5 text-white m-2 p-3 rounded-lg font-mono h-56 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl"
+        class="col-span-5 text-white m-2 p-3 rounded-lg font-mono h-56 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl content-center"
       >
+      IMPACT CLOUD
         <p
           v-if="wordCloud[0]"
-          :style="wordCloud[0].value > 0 ? 'color: green' : 'color: red'"
-          class="text-xl"
+          :style="wordCloud[0].value > 0 ? 'color: #4ade80' : 'color: #ef4444'"
+          class="text-xl font-sans"
         >
           {{ wordCloud[0].text }}
         </p>
         <br />
         <p
           v-if="wordCloud[1]"
-          :style="wordCloud[1].value > 0 ? 'color: green' : 'color: red'"
-          class="text-lg"
+          :style="wordCloud[1].value > 0 ? 'color: #4ade80' : 'color: #ef4444'"
+          class="text-lg font-sans"
         >
           {{ wordCloud[1].text }}
         </p>
         <br />
         <p
           v-if="wordCloud[2]"
-          :style="wordCloud[2].value > 0 ? 'color: green' : 'color: red'"
-          class="text-base"
+          :style="wordCloud[2].value > 0 ? 'color: #4ade80' : 'color: #ef4444'"
+          class="text-base font-sans"
         >
           {{ wordCloud[2].text }}
         </p>
@@ -230,7 +231,7 @@ export default defineComponent({
         {
           data: dataValues.value,
           tension: 0.4,
-          borderColor: 'green',
+          borderColor: 'white',
         },
         {
           data: dataValues2.value,
@@ -268,6 +269,11 @@ export default defineComponent({
           },
           suggestedMin: -1.0,
           suggestedMax: 1.0,
+        },
+      },
+      elements: {
+        point: {
+          radius: 0,
         },
       },
       annotation: {
