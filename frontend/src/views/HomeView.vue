@@ -13,21 +13,23 @@
           src="../assets/happy.png"
           alt="Happy Avatar"
           width="250"
-          v-if="sentiment.overallSentiment === 'Positive'"
+          v-if="timeline[timeline.length - 1]?.value >= 0.5"
         />
         <img
           class="flex items-center mx-auto mt-10 filter drop-shadow-2xl"
           src="../assets/neutral.png"
           alt="Neutral Avatar"
           width="250"
-          v-if="sentiment.overallSentiment === 'Neutral'"
+          v-if="
+            timeline[timeline.length - 1]?.value >= 0 && timeline[timeline.length - 1]?.value < 0.5
+          "
         />
         <img
           class="flex items-center mx-auto mt-10 filter drop-shadow-2xl"
           src="../assets/sad.png"
           alt="Sad Avatar"
           width="250"
-          v-if="sentiment.overallSentiment === 'Negative'"
+          v-if="timeline[timeline.length - 1]?.value < 0"
         />
       </div>
       <div
@@ -109,7 +111,7 @@
         id="stream"
         class="col-span-5 text-white m-2 p-3 rounded-lg font-mono h-56 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl content-center"
       >
-      IMPACT CLOUD
+        IMPACT CLOUD
         <p
           v-if="wordCloud[0]"
           :style="wordCloud[0].value > 0 ? 'color: #4ade80' : 'color: #ef4444'"
