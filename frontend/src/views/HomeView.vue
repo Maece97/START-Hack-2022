@@ -42,7 +42,7 @@
           @playing="startPlaying"
           @pause="updatePaused"
         >
-          <source src="http://localhost:8080/video/" type="video/mp4" />
+          <source :src="`${url}/video/`" type="video/mp4" />
           <track kind="captions" />
           Your browser does not support the video tag.
         </video>
@@ -84,39 +84,58 @@
         id="stream"
         class="col-span-7 text-white m-2 p-3 rounded-lg font-mono h-56 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl"
       >
-      SENTIMENT TRACKER
+        SENTIMENT TRACKER
         <LineChart style="max-height: 100%" v-bind="lineChartProps" />
       </div>
-      <div
+      <!-- <div
         id="stream"
         class="col-span-5 text-white m-2 p-3 rounded-lg font-mono h-56 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl"
       >
         <ul class="cloud" role="navigation" aria-label="Webdev word cloud">
-          <!-- <li><a href="#" data-weight="4">HTTP</a></li>
-          <li><a href="#" data-weight="1">Ember</a></li>
-          <li><a href="#" data-weight="5">Sass</a></li>
-          <li><a href="#" data-weight="8">HTML</a></li>
-          <li><a href="#" data-weight="6">FlexBox</a></li>
-          <li><a href="#" data-weight="4">API</a></li>
-          <li><a href="#" data-weight="5">VueJS</a></li>
-          <li><a href="#" data-weight="6">Grid</a></li>
-          <li><a href="#" data-weight="2">Rest</a></li>
-          <li><a href="#" data-weight="9">JavaScript</a></li>
-          <li><a href="#" data-weight="3">Animation</a></li>
-          <li><a href="#" data-weight="7">React</a></li>
-          <li><a href="#" data-weight="8">CSS</a></li>
-          <li><a href="#" data-weight="1">Cache</a></li>
-          <li><a href="#" data-weight="3">Less</a></li> -->
           <li v-for="word in wordCloud" :key="word.text">
-            <a href="#" :data-weight="word.value">{{ word.text }}</a>
+            <a
+              href="#"
+              :data-weight="Math.floor(Math.abs(word.value))"
+              :style="word.value > 0 ? 'color: green' : 'color: red'"
+              >{{ word.text }}</a
+            >
           </li>
         </ul>
 
         {{ wordCloud }}
+      </div> -->
+
+      <div
+        id="stream"
+        class="col-span-5 text-white m-2 p-3 rounded-lg font-mono h-56 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl"
+      >
+        <p
+          v-if="wordCloud[0]"
+          :style="wordCloud[0].value > 0 ? 'color: green' : 'color: red'"
+          class="text-xl"
+        >
+          {{ wordCloud[0].text }}
+        </p>
+        <br />
+        <p
+          v-if="wordCloud[1]"
+          :style="wordCloud[1].value > 0 ? 'color: green' : 'color: red'"
+          class="text-lg"
+        >
+          {{ wordCloud[1].text }}
+        </p>
+        <br />
+        <p
+          v-if="wordCloud[2]"
+          :style="wordCloud[2].value > 0 ? 'color: green' : 'color: red'"
+          class="text-base"
+        >
+          {{ wordCloud[2].text }}
+        </p>
+
+        <!-- {{ wordCloud }} -->
       </div>
     </div>
-    <div id="my_canvas"></div>
-    <cloud :data="words" :fontSizeMapper="fontSizeMapper" />
   </div>
 </template>
 
@@ -128,7 +147,6 @@ import { LineChart, useLineChart } from 'vue-chart-3';
 // eslint-disable-next-line object-curly-newline
 import { Chart, registerables, ChartData, ChartOptions } from 'chart.js';
 
-import { WordCloudChart } from 'chartjs-chart-wordcloud';
 import { useChatStore } from '../stores';
 
 // import { WordCloud } from '../components/WordCloud';
@@ -146,19 +164,7 @@ export default defineComponent({
       time: 0,
       isRunning: false,
       interval: null,
-      type: 'wordCloud',
-      data: {
-        // text
-        labels: ['Hello', 'world', 'normally', 'you', 'want', 'more', 'words', 'than', 'this'],
-        datasets: [
-          {
-            label: 'DS',
-            // size in pixel
-            data: [90, 80, 70, 60, 50, 40, 30, 20, 10],
-          },
-        ],
-      },
-      options: {},
+      url: process.env.VUE_APP_API_URL || 'http://localhost:8080',
     };
   },
   methods: {
@@ -265,14 +271,16 @@ export default defineComponent({
         },
       },
       annotation: {
-        annotations: [{
-          type: 'line',
-          mode: 'horizontal',
-          scaleID: 'y-axis-0',
-          value: 0,
-          borderColor: '#FFFFFF',
-          borderWidth: 4,
-        }],
+        annotations: [
+          {
+            type: 'line',
+            mode: 'horizontal',
+            scaleID: 'y-axis-0',
+            value: 0,
+            borderColor: '#FFFFFF',
+            borderWidth: 4,
+          },
+        ],
       },
     }));
 
@@ -335,7 +343,7 @@ ul.cloud a {
   --size: 4;
   --color: #a33;
   color: var(--color);
-  font-size: calc(var(--size) * 0.25rem + 0.5rem);
+  font-size: calc(var(--size) * 0.18rem + 0.375rem);
   display: block;
   padding: 0.125rem 0.25rem;
   position: relative;
@@ -406,10 +414,10 @@ ul.cloud a::before {
   transition: width 0.25s;
 }
 
-ul.cloud a:focus::before,
+/* ul.cloud a:focus::before,
 ul.cloud a:hover::before {
   width: 100%;
-}
+} */
 
 @media (prefers-reduced-motion) {
   ul.cloud * {
