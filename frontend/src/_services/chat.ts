@@ -1,11 +1,10 @@
-import axios from 'axios';
-import { Launch } from '@/interfaces/launches';
 import { ChatMessage } from '@/interfaces/chat';
+import axios from 'axios';
 
 export const createChatMessage = async (message: ChatMessage): Promise<any> =>
   // eslint-disable-next-line implicit-arrow-linebreak
   axios
-    .post('http://localhost:8080/message/', {
+    .post(`${process.env.VUE_APP_API_URL || 'http://localhost:8080'}/message/`, {
       message: message.message,
       timestamp: message.timestamp,
       username: message.username,
