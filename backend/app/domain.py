@@ -155,7 +155,7 @@ class ReceivedMessages:
             current_average_sentiment = self._compute_average_sentiment_over_messages(
                 self.messages[start:end]
             )
-            timeline[current_timestamp] = current_average_sentiment.compound
+            timeline[str(current_timestamp)] = current_average_sentiment.compound
             start += window_size
         return timeline
 
