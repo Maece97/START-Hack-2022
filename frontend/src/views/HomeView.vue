@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home ml-20 mr-20 mt-5">
     <img class="" src="../assets/logo_audiment.png" alt="Logo" width="200" />
     <div class="grid grid-cols-12 gap-1">
       <div
@@ -17,58 +17,45 @@
         />
         <img
           class="flex items-center mx-auto mt-10 filter drop-shadow-2xl"
-          src="../assets/neutral.png"
-          alt="Neutral Avatar"
-          width="250"
-          v-if="
-            timeline[timeline.length - 1]?.value >= 0 && timeline[timeline.length - 1]?.value < 0.5
-          "
-        />
-        <img
-          class="flex items-center mx-auto mt-10 filter drop-shadow-2xl"
           src="../assets/sad.png"
           alt="Sad Avatar"
           width="250"
-          v-if="timeline[timeline.length - 1]?.value < 0"
+          v-else-if="timeline[timeline.length - 1]?.value < 0"
+        />
+        <img
+          class="flex items-center mx-auto mt-10 filter drop-shadow-2xl"
+          src="../assets/neutral.png"
+          alt="Neutral Avatar"
+          width="250"
+          v-else
         />
       </div>
       <div
         id="stream"
         class="col-span-6 text-white m-2 p-3 rounded-lg font-mono h-96 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-blur-md"
       >
-        <div class="mb-2">LIVE</div>
-        <video
-          class="flex flex-col items-center mx-auto rounded-lg"
-          width="550"
-          controls
-          @playing="startPlaying"
-          @pause="updatePaused"
-        >
-          <source :src="`${url}/video/`" type="video/mp4" />
-          <track kind="captions" />
-          Your browser does not support the video tag.
-        </video>
+        <img src="../assets/QR.svg.png" alt="QR code" class="max-h-full" style="margin: 0 auto" />
       </div>
       <div
         id="chat"
         class="flex flex-col col-span-3 text-white m-2 p-3 rounded-lg font-mono h-96 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl"
       >
         <div class="mb-2">CHAT</div>
-        <div id="messages" class="overflow-y-auto text-sm mb-auto h-72 overflow-auto">
+        <div id="messages" class="overflow-y-auto text-sm mb-auto overflow-auto">
           <div v-for="message in chat" :key="message.timestamp">
             <span class="text-blue-400">{{ message.username }}&nbsp;</span>
             <span> {{ message.message }}</span>
           </div>
         </div>
 
-        <input
+        <!-- <input
           v-model="messageBox"
           v-on:keyup.enter="
             sendMessage();
             newChatMessageCallback();
           "
           class="bottom-0 opacity-20 text-white shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
+        /> -->
         <!-- <button
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           @click="
@@ -111,7 +98,7 @@
         id="stream"
         class="col-span-5 text-white m-2 p-3 rounded-lg font-mono h-56 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-filter backdrop-blur-xl content-center"
       >
-        IMPACT CLOUD
+        Live DEMO!
         <p
           v-if="wordCloud[0]"
           :style="wordCloud[0].value > 0 ? 'color: #4ade80' : 'color: #ef4444'"
@@ -198,7 +185,7 @@ export default defineComponent({
       this.time += 1;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      this.autoChatMessage(this.time, this.startTime, this.newChatMessageCallback);
+      // this.autoChatMessage(this.time, this.startTime, this.newChatMessageCallback);
     },
     newChatMessageCallback() {
       this.updateChart();
@@ -206,8 +193,19 @@ export default defineComponent({
       objDiv!.scrollTop = objDiv?.scrollHeight || 0;
     },
   },
+  watch: {
+    chat: {
+      handler(newValue, oldValue) {
+        setTimeout(() => {
+          this.newChatMessageCallback();
+        }, 10);
+      },
+      deep: true,
+    },
+  },
   setup() {
     const chatStore = useChatStore();
+    chatStore.init();
     const loading = ref(true);
     const messageBox = ref('');
     const startTime = ref(0);
@@ -312,7 +310,6 @@ export default defineComponent({
       messageBox,
       sendMessage,
       lineChartProps,
-      autoChatMessage: chatStore.autoChatMessage,
       lineChartRef,
       startTime,
       updateChart,
