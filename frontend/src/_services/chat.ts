@@ -8,7 +8,7 @@ export const createChatMessage = async (message: ChatMessage): Promise<any> =>
       message: message.message,
       timestamp: message.timestamp,
       username: message.username,
-      startTime: message.startTime,
+      // startTime: message.startTime,
     })
     .then((response) => response.data)
     .catch((error) => {
