@@ -432,12 +432,10 @@ export const useChatStore = defineStore('chat', {
   actions: {
     async getChatMessages() {
       const m = await getChatMessage();
-      console.log(m);
       this.chat = m;
     },
     // any amount of arguments, return a promise or not
     async sendChatMessage(message: string, startTime: number, username?: string) {
-      console.log('uname', username);
       const chatMessage: ChatMessage = {
         message,
         timestamp: Date.now(),
