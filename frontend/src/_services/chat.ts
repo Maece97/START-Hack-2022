@@ -16,6 +16,16 @@ export const createChatMessage = async (message: ChatMessage): Promise<any> =>
       return false;
     });
 
+export const getChatMessage = async (): Promise<any> =>
+  // eslint-disable-next-line implicit-arrow-linebreak
+  axios
+    .get(`${process.env.VUE_APP_API_URL || 'http://localhost:8080'}/messages`)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.log(error);
+      return false;
+    });
+
 export const test = (): void => {
   console.log({
     message: 'MEssage heyhey',

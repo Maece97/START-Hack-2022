@@ -98,6 +98,7 @@ export default defineComponent({
   setup() {
     const chatStore = useChatStore();
     chatStore.init();
+    chatStore.getChatMessages();
     const loading = ref(true);
     const messageBox = ref('');
     const nameBox = ref('');

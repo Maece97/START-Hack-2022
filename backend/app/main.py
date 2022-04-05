@@ -13,6 +13,8 @@ EXAMPLE_AUDIO_PATH = "app/media/example-audio.mp3"
 
 received_message: ReceivedMessages = ReceivedMessages()
 
+send_messages = []
+
 start_time = None
 
 # sentiment_queue: queue.Queue = queue.Queue(maxsize=200)
@@ -53,6 +55,9 @@ manager = ConnectionManager()
 def read_root():
     return {"Hello": "World"}
 
+@app.get("/messages")
+def read_messages():
+    return send_messages
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Optional[str] = None):
@@ -114,6 +119,12 @@ async def post_message(
     }
     # print(result)
 
+    send_messages.append({
+      "username": username,
+      "timestamp": timestamp,
+      "message": message,
+    })
+
     await manager.broadcast(
         str(json.dumps(result)))
     # await manager.broadcast("HEY")
@@ -143,6 +154,7 @@ async def websocket_endpoint(websocket: WebSocket):
 @app.get("/mock/reset-messages")
 def send_mock_message_request():
     received_message.clear()
+    send_messages.clear()
     return
 
 @app.get("/mock/messages")
