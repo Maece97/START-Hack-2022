@@ -467,13 +467,13 @@ export const useChatStore = defineStore('chat', {
       //   });
       // }
 
-      console.log('response', response);
-
       // this.chat.push(chatMessage);
     },
     init() {
       // Create WebSocket connection.
-      const socket = new WebSocket('ws://localhost:8080/ws');
+      const socket = new WebSocket(
+        `${process.env.VUE_APP_WEBSOCKET_URL || 'ws://localhost:8080'}/ws`,
+      );
 
       // Connection opened
       socket.addEventListener('open', (event) => {
@@ -482,8 +482,6 @@ export const useChatStore = defineStore('chat', {
 
       // Listen for messages
       socket.addEventListener('message', (event) => {
-        // console.log(event.data);
-        console.log('Message from server ', event.data);
         const data = JSON.parse(event.data);
 
         this.sentiment = {

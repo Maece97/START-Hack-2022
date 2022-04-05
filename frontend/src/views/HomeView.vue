@@ -34,7 +34,12 @@
         id="stream"
         class="col-span-6 text-white m-2 p-3 rounded-lg font-mono h-96 bg-white shadow-lg bg-clip-padding bg-opacity-10 border border-gray-200 backdrop-blur-md"
       >
-        <img src="../assets/QR.svg.png" alt="QR code" class="max-h-full" style="margin: 0 auto" />
+        <img
+          src="../assets/qr.png"
+          alt="QR code"
+          class="max-h-full h-full"
+          style="margin: 0 auto"
+        />
       </div>
       <div
         id="chat"

@@ -16,7 +16,7 @@
       <input
         v-model="nameBox"
         placeholder="Your Name"
-        class="bottom-0 opacity-20 text-white shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        class="mb-2 bottom-0 opacity-20 text-white shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       />
       <input
         v-model="messageBox"
@@ -24,8 +24,25 @@
           sendMessage();
           newChatMessageCallback();
         "
-        class="bottom-0 opacity-20 text-white shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        class="mb-2 bottom-0 opacity-20 text-white shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       />
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+        @click="
+          sendMessage();
+          newChatMessageCallback();
+        "
+        v-if="messageBox !== ''"
+      >
+        Send
+      </button>
+      <button
+        class="bg-blue-500 text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed"
+        disabled
+        v-else
+      >
+        Send
+      </button>
       <!-- <button
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           @click="

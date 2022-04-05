@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VUE_APP_API_URL: https://start-hack-2022-backend-xertbtzkda-uc.a.run.app
+      VUE_APP_WEBSOCKET_URL: wss://start-hack-2022-backend-xertbtzkda-uc.a.run.app
       BACKEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_APP_NAME }}_backend
       FRONTEND_IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_APP_NAME }}_frontend
     steps:
