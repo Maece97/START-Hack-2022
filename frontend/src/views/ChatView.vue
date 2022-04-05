@@ -32,7 +32,7 @@
           sendMessage();
           newChatMessageCallback();
         "
-        v-if="messageBox !== ''"
+        v-if="messageBox !== '' && messageBox.trim() !== ''"
       >
         Send
       </button>

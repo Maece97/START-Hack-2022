@@ -88,6 +88,12 @@ async def post_message(
     # else:
     #     start_time = startTime
 
+    message = message.strip()
+    username = username.strip()
+
+    if message == '' or username == '':
+       return
+
     print(
         "Received message: '{}' at {}".format(
             message, str(datetime.fromtimestamp(timestamp / 1000))
