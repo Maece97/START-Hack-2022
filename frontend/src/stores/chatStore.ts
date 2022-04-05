@@ -432,17 +432,20 @@ export const useChatStore = defineStore('chat', {
   actions: {
     async getChatMessages() {
       const m = await getChatMessage();
-      console.log(m);
       this.chat = m;
     },
     // any amount of arguments, return a promise or not
     async sendChatMessage(message: string, startTime: number, username?: string) {
-      console.log('uname', username);
+      let usernameNew = username?.trim();
+      if (usernameNew === '') {
+        usernameNew = undefined;
+      }
+
       const chatMessage: ChatMessage = {
         message,
         timestamp: Date.now(),
         startTime,
-        username: username || `Anon${Math.floor(Math.random() * (999 - 100) + 100)}`,
+        username: usernameNew || `Anon${Math.floor(Math.random() * (999 - 100) + 100)}`,
       };
       const response = await createChatMessage(chatMessage);
       // this.sentiment = {
