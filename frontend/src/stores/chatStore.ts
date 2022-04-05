@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ChatMessage } from '@/interfaces/chat';
-import { createChatMessage } from '@/_services/chat';
+import { createChatMessage, getChatMessage } from '@/_services/chat';
 
 interface Sentiment {
   compound: number;
@@ -430,6 +430,11 @@ export const useChatStore = defineStore('chat', {
     },
   },
   actions: {
+    async getChatMessages() {
+      const m = await getChatMessage();
+      console.log(m);
+      this.chat = m;
+    },
     // any amount of arguments, return a promise or not
     async sendChatMessage(message: string, startTime: number, username?: string) {
       console.log('uname', username);
